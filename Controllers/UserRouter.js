@@ -13,6 +13,7 @@ router.post("/signup",async(req,res)=>{
     
     let {data}={"data":req.body}
     let Password=data.Password
+    let ConfirmPassword=data.ConfirmPassword
     
     // hashPasswordGenerator(Password).then(
     //     (hashedPassword)=>{
@@ -26,16 +27,25 @@ router.post("/signup",async(req,res)=>{
     //         })
     //     })
 
-
+        if(Password==ConfirmPassword)
+        {
         const hashedPassword=await hashPasswordGenerator(Password)
+        const hashedConfirmPassword=await hashPasswordGenerator(ConfirmPassword)
         data.Password=hashedPassword
+        data.ConfirmPassword=hashedConfirmPassword
             let user = new userModel(data)
              let result = await user.save()
                 res.json({
                status:"success"
                  })
 
-
+        }
+        else
+        {
+           return res.json({
+            status:"Passwords Not Match"
+              }) 
+        }
         }
     )
 
